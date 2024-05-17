@@ -1,0 +1,1 @@
+import{j as r,G as a,T as n}from"./index-DT-f94Ym.js";function t(){return r.jsx(a,{container:!0,rowSpacing:4.5,columnSpacing:2.75,children:r.jsx(a,{item:!0,xs:12,sx:{mb:-2.25},children:r.jsx(n,{variant:"h5",children:"Dashboard"})})})}export{t as default};
