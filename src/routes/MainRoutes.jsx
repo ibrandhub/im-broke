@@ -31,22 +31,6 @@ const MainRoutes = {
     {
       path: '/customer',
       element: <CustomerPage />
-    },
-    {
-      path: 'color',
-      element: <Color />
-    },
-    {
-      path: 'sample-page',
-      element: <SamplePage />
-    },
-    {
-      path: 'shadow',
-      element: <Shadow />
-    },
-    {
-      path: 'typography',
-      element: <Typography />
     }
   ]
 };

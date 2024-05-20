@@ -8,7 +8,7 @@ import customer from './customer';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, customer, utilities, support]
+  items: [dashboard, customer]
 };
 
 export default menuItems;

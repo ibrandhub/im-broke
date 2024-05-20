@@ -47,12 +47,9 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
 
-  console.log('asdasdasd');
-
   useEffect(() => {
     const fetchUser = async () => {
       const res = await getUserData();
-      console.log('rwe', res);
       if (res) {
         setUser(res);
       } else {
@@ -100,9 +97,7 @@ export default function Profile() {
       >
         <Stack direction="row" spacing={1.25} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src={avatar1} size="sm" />
-          <Typography variant="subtitle1" sx={{ textTransform: 'capitalize' }}>
-            {user?.id && `${user?.fname} ${user?.lname}`}
-          </Typography>
+          <Typography variant="subtitle1">{user?._id && `${user?.name}`}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
@@ -134,7 +129,7 @@ export default function Profile() {
                         <Stack direction="row" spacing={1.25} alignItems="center">
                           <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                           <Stack>
-                            <Typography variant="h6"> {user?.id && `${user?.fname} ${user?.lname}`}</Typography>
+                            <Typography variant="h6">{user?._id && `${user?.name}`}</Typography>
                             <Typography variant="body2" color="text.secondary">
                               Adminator
                             </Typography>

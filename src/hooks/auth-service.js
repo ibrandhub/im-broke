@@ -1,18 +1,20 @@
 import axios from 'axios';
 
-const API_URL = 'https://www.melivecode.com/api/';
+const API_URL = import.meta.env.VITE_API_URL;
+
+console.log('API_URL', API_URL);
 
 export const AuthService = () => {
   const login = async (username, password) => {
     try {
       const response = await axios.post(API_URL + 'login', {
-        username,
+        email: username,
         password,
         expiresIn: 60000
       });
-
-      if (response.data.accessToken) {
-        localStorage.setItem('token', response.data.accessToken);
+      console.log('response', response);
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
       }
 
       return response.data;
@@ -26,10 +28,10 @@ export const AuthService = () => {
     localStorage.removeItem('token');
   };
 
-  const register = async (username, email, password) => {
+  const register = async (name, email, password) => {
     try {
-      const response = await axios.post(API_URL + 'signup', {
-        username,
+      const response = await axios.post(API_URL + 'register', {
+        name,
         email,
         password
       });
@@ -61,12 +63,13 @@ export const AuthService = () => {
 
   const isAuthenticated = () => {
     const token = localStorage.getItem('token');
+    console.log('token', token);
     return !!token;
   };
 
   const getUserData = async () => {
     try {
-      const response = await axios.get(API_URL + 'auth/user', {
+      const response = await axios.get(API_URL + 'getuser', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
@@ -74,11 +77,14 @@ export const AuthService = () => {
 
       console.log('response', response);
       if (response.status === 200) {
-        return response.data.user;
+        return response.data;
       } else {
+        localStorage.removeItem('token');
         return null;
       }
     } catch (error) {
+      localStorage.removeItem('token');
+      // localStorage.removeItem('token');
       console.error('Error fetching user data', error);
       throw error;
     }

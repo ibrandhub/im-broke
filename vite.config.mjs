@@ -8,7 +8,7 @@ import jsconfigPaths from 'vite-jsconfig-paths';
 
 export default defineConfig({
   plugins: [react(), jsconfigPaths()],
-  base: '/im-broke/', // accessing env variable is not possible here. So hard coding this.
+  base: '/', // accessing env variable is not possible here. So hard coding this.
   build: {
     outDir: 'build'
   },
