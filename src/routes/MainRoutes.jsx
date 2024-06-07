@@ -4,15 +4,14 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import Dashboard from 'layout/Dashboard';
 
-const Color = Loadable(lazy(() => import('pages/component-overview/color')));
-const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
-const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/index')));
 const CustomerPage = Loadable(lazy(() => import('pages/customer/index')));
+const RoomsPage = Loadable(lazy(() => import('pages/rooms/index')));
+const RoomsPageId = Loadable(lazy(() => import('pages/rooms/id/index')));
 const LandingPage = Loadable(lazy(() => import('pages/landing/index')));
+const RankingPage = Loadable(lazy(() => import('pages/ranking/index')));
 
 // render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -31,6 +30,18 @@ const MainRoutes = {
     {
       path: '/customer',
       element: <CustomerPage />
+    },
+    {
+      path: '/ranking',
+      element: <RankingPage />
+    },
+    {
+      path: '/rooms',
+      element: <RoomsPage />
+    },
+    {
+      path: '/rooms/:id',
+      element: <RoomsPageId />
     }
   ]
 };

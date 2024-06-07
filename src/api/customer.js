@@ -32,3 +32,16 @@ export const filterCustomer = async (search) => {
     return null;
   }
 };
+
+// try {
+//   const response = await axios.post('/api/transfer', {
+//     senderId: user._id,
+//     receiverId,
+//     amount: coin
+//   });
+
+//   console.log('Transfer response:', response.data);
+//   handleClose();
+// } catch (error) {
+//   console.error('Error transferring coins:', error.response.data);
+// }

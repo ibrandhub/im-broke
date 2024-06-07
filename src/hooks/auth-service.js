@@ -1,18 +1,16 @@
 import axios from 'axios';
+// import { jwtDecode } from 'jwt-decode';
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-console.log('API_URL', API_URL);
 
 export const AuthService = () => {
   const login = async (username, password) => {
     try {
-      const response = await axios.post(API_URL + 'login', {
+      const response = await axios.post(API_URL + 'user/login', {
         email: username,
         password,
         expiresIn: 60000
       });
-      console.log('response', response);
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
@@ -30,7 +28,7 @@ export const AuthService = () => {
 
   const register = async (name, email, password) => {
     try {
-      const response = await axios.post(API_URL + 'register', {
+      const response = await axios.post(API_URL + 'user/register', {
         name,
         email,
         password
@@ -63,7 +61,6 @@ export const AuthService = () => {
 
   const isAuthenticated = () => {
     const token = localStorage.getItem('token');
-    console.log('token', token);
     return !!token;
   };
 
@@ -75,7 +72,6 @@ export const AuthService = () => {
         }
       });
 
-      console.log('response', response);
       if (response.status === 200) {
         return response.data;
       } else {

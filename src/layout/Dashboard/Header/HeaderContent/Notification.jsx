@@ -1,4 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { format, formatDistanceToNow } from 'date-fns';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -12,7 +14,6 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Tooltip from '@mui/material/Tooltip';
@@ -26,9 +27,8 @@ import Transitions from 'components/@extended/Transitions';
 // assets
 import BellOutlined from '@ant-design/icons/BellOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
-import GiftOutlined from '@ant-design/icons/GiftOutlined';
-import MessageOutlined from '@ant-design/icons/MessageOutlined';
-import SettingOutlined from '@ant-design/icons/SettingOutlined';
+
+import { useNotofication } from './../../../../hooks/useNotofication';
 
 // sx styles
 const avatarSX = {
@@ -43,21 +43,32 @@ const actionSX = {
   top: 'auto',
   right: 'auto',
   alignSelf: 'flex-start',
-
   transform: 'none'
 };
 
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
-export default function Notification() {
+export default function Notification({ user }) {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
-
+  const { read, master, transferLogLists, handleReadTransferLog, handleReadTransferLogAll } = useNotofication();
   const anchorRef = useRef(null);
-  const [read, setRead] = useState(2);
   const [open, setOpen] = useState(false);
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+
+  useEffect(() => {
+    if (user) {
+      transferLogLists({ userId: user?._id, page: 1, per_page: 5 });
+    }
+  }, [user]);
+
+  const handleToggle = async () => {
+    setOpen((prevOpen) => {
+      if (!prevOpen) {
+        transferLogLists({ userId: user?._id, page: 1, per_page: 5 });
+      }
+
+      return !prevOpen;
+    });
   };
 
   const handleClose = (event) => {
@@ -65,6 +76,20 @@ export default function Notification() {
       return;
     }
     setOpen(false);
+  };
+
+  const handleReadNotication = async (id) => {
+    const result = await handleReadTransferLog(id);
+    if (result.status == 200) {
+      transferLogLists({ userId: user?._id, page: 1, per_page: 5 });
+    }
+  };
+
+  const handleReadAllNotication = async (userId) => {
+    const result = await handleReadTransferLogAll(userId);
+    if (result.status == 200) {
+      transferLogLists({ userId: user?._id, page: 1, per_page: 5 });
+    }
   };
 
   const iconBackColorOpen = 'grey.100';
@@ -107,7 +132,7 @@ export default function Notification() {
                     <>
                       {read > 0 && (
                         <Tooltip title="Mark as all read">
-                          <IconButton color="success" size="small" onClick={() => setRead(0)}>
+                          <IconButton color="success" size="small" onClick={() => handleReadAllNotication(user?._id)}>
                             <CheckCircleOutlined style={{ fontSize: '1.15rem' }} />
                           </IconButton>
                         </Tooltip>
@@ -127,104 +152,46 @@ export default function Notification() {
                       }
                     }}
                   >
-                    <ListItemButton selected={read > 0}>
-                      <ListItemAvatar>
-                        <Avatar sx={{ color: 'success.main', bgcolor: 'success.lighter' }}>
-                          <GiftOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            It&apos;s{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Cristina danny&apos;s
-                            </Typography>{' '}
-                            birthday today.
-                          </Typography>
-                        }
-                        secondary="2 min ago"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          3:00 AM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}>
-                          <MessageOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Aida Burg
-                            </Typography>{' '}
-                            commented your post.
-                          </Typography>
-                        }
-                        secondary="5 August"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          6:00 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton selected={read > 0}>
-                      <ListItemAvatar>
-                        <Avatar sx={{ color: 'error.main', bgcolor: 'error.lighter' }}>
-                          <SettingOutlined />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Your Profile is Complete &nbsp;
-                            <Typography component="span" variant="subtitle1">
-                              60%
-                            </Typography>{' '}
-                          </Typography>
-                        }
-                        secondary="7 hours ago"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          2:45 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}>C</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Cristina Danny
-                            </Typography>{' '}
-                            invited to join{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Meeting.
-                            </Typography>
-                          </Typography>
-                        }
-                        secondary="Daily scrum meeting time"
-                      />
-                      <ListItemSecondaryAction>
-                        <Typography variant="caption" noWrap>
-                          9:10 PM
-                        </Typography>
-                      </ListItemSecondaryAction>
-                    </ListItemButton>
-                    <Divider />
+                    {!master?.data && (
+                      <>
+                        <Typography variant="subtitle2" align="center" py={1}>{`${master?.message}`}</Typography>
+                        <Divider />
+                      </>
+                    )}
+                    {master?.data &&
+                      master?.data.map((list, i) => {
+                        const notificationDate = new Date(list.date);
+                        const formattedDate =
+                          formatDistanceToNow(notificationDate, { addSuffix: true }) +
+                          (notificationDate > new Date() ? '' : `, ${format(notificationDate, 'HH:mm')}`);
+                        return (
+                          <Box key={`transfer-log-${i}`}>
+                            <ListItemButton selected={!list?.isRead} onClick={() => handleReadNotication(list?._id)}>
+                              <ListItemAvatar>
+                                <Avatar sx={{ color: 'primary.main', bgcolor: 'primary.lighter' }}>
+                                  {list?.type === 'debit' ? 'D' : 'C'}
+                                </Avatar>
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={
+                                  <Typography variant="h6">
+                                    <Typography component="span" variant="subtitle1">
+                                      {list?.type === 'debit' ? `${list?.sender_id?.name}` : `${list?.receiver_id?.name}`}
+                                    </Typography>{' '}
+                                    {list?.type === 'debit' ? 'sent' : 'received'} {`${list?.amount}`} coins{' '}
+                                    {list?.type === 'debit' ? 'to' : 'from'}{' '}
+                                    <Typography component="span" variant="subtitle1">
+                                      {list?.type === 'debit' ? `${list?.receiver_id?.name}` : `${list?.sender_id?.name}`}.
+                                    </Typography>
+                                  </Typography>
+                                }
+                                secondary={formattedDate}
+                              />
+                            </ListItemButton>
+                            <Divider />
+                          </Box>
+                        );
+                      })}
                     <ListItemButton sx={{ textAlign: 'center', py: `${12}px !important` }}>
                       <ListItemText
                         primary={
@@ -244,3 +211,7 @@ export default function Notification() {
     </Box>
   );
 }
+
+Notification.propTypes = {
+  user: PropTypes.object
+};

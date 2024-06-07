@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -20,7 +21,7 @@ import MoreOutlined from '@ant-design/icons/MoreOutlined';
 
 // ==============================|| HEADER CONTENT - MOBILE ||============================== //
 
-export default function MobileSection() {
+export default function MobileSection({ logout, user }) {
   const theme = useTheme();
 
   const [open, setOpen] = useState(false);
@@ -92,7 +93,7 @@ export default function MobileSection() {
                 <AppBar color="inherit">
                   <Toolbar>
                     <Search />
-                    <Profile />
+                    <Profile logout={logout} user={user} />
                   </Toolbar>
                 </AppBar>
               </ClickAwayListener>
@@ -103,3 +104,11 @@ export default function MobileSection() {
     </>
   );
 }
+
+MobileSection.propTypes = {
+  logout: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string
+  })
+};

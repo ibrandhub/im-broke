@@ -1,14 +1,14 @@
 // project import
-import dashboard from './dashboard';
+// import dashboard from './dashboard';
 // import pages from './page';
-import utilities from './utilities';
-import support from './support';
-import customer from './customer';
+// import customer from './customer';
+import rooms from './rooms';
+import ranking from './ranking';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, customer]
+  items: [ranking, rooms]
 };
 
 export default menuItems;
