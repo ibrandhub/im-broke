@@ -1,7 +1,7 @@
 import { updateProfile } from 'api/user';
 
 export function useProfile(userId) {
-  const handleSubmitProofile = async ({ name, password }) => {
+  const handleSubmitProfile = async ({ name, password }) => {
     try {
       const response = await updateProfile({ userId, name, password });
       return response;
@@ -12,6 +12,6 @@ export function useProfile(userId) {
   };
 
   return {
-    handleSubmitProofile
+    handleSubmitProfile
   };
 }

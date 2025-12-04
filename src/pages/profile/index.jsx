@@ -7,11 +7,12 @@ import { AuthService } from './../../hooks/auth-service';
 export default function Profile() {
   const { getUserData } = AuthService();
   const [user, setUser] = useState(null);
-  const [setPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [type, setType] = useState('');
-  const { handleSubmitProofile } = useProfile(user?._id);
+  const { handleSubmitProfile } = useProfile(user?._id);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -39,14 +40,38 @@ export default function Profile() {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     // Implement profile or password update logic here
     try {
-      await handleSubmitProofile({ name: user?.name, password: user?.password });
+      await handleSubmitProfile({ name: user?.name });
+      setPassword('');
       handleClose();
+      setIsLoading(false);
     } catch (err) {
+      setPassword('');
+      setIsLoading(false);
       setError('Failed to update profile. Please try again.');
     }
   };
+
+  const handleSubmitPassword = async () => {
+    setIsLoading(true);
+    // Implement password update logic here
+    try {
+      if (password) {
+        await handleSubmitProfile({ password: password });
+        handleClose();
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        setError('Password cannot be empty.');
+      }
+    } catch (err) {
+      setIsLoading(false);
+      setError('Failed to update password. Please try again.');
+    }
+  };
+
   return (
     <Card>
       <Box sx={{ px: 2, py: 1, borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -110,10 +135,24 @@ export default function Profile() {
               onChange={(e) => setPassword(e.target.value)}
             />
           )}
+
+          {error && (
+            <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+              {error}
+            </Typography>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Save</Button>
+          {type === 'profile' ? (
+            <Button disabled={isLoading} onClick={handleSubmit}>
+              Save
+            </Button>
+          ) : (
+            <Button disabled={isLoading} onClick={handleSubmitPassword}>
+              Save
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </Card>
