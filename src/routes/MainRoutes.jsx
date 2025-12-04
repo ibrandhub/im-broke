@@ -10,6 +10,7 @@ const RoomsPage = Loadable(lazy(() => import('pages/rooms/index')));
 const RoomsPageId = Loadable(lazy(() => import('pages/rooms/id/index')));
 const LandingPage = Loadable(lazy(() => import('pages/landing/index')));
 const RankingPage = Loadable(lazy(() => import('pages/ranking/index')));
+const Profile = Loadable(lazy(() => import('pages/profile/index')));
 
 // render - sample page
 
@@ -42,6 +43,10 @@ const MainRoutes = {
     {
       path: '/rooms/:id',
       element: <RoomsPageId />
+    },
+    {
+      path: '/profile',
+      element: <Profile />
     }
   ]
 };

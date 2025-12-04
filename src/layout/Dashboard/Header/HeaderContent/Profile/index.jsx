@@ -15,6 +15,7 @@ import Avatar from 'components/@extended/Avatar';
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -37,19 +38,23 @@ export default function Profile({ logout, user }) {
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
-      <ButtonBase
-        sx={{
-          p: 0.25,
-          bgcolor: 'transparent',
-          borderRadius: 1
-        }}
-        ref={anchorRef}
-      >
-        <Stack direction="row" spacing={1.25} alignItems="center" sx={{ p: 0.5 }}>
-          <Avatar alt="profile user" src={avatar1} size="sm" />
-          <Typography variant="subtitle1">{user?._id && `${user?.name}`}</Typography>
-        </Stack>
-      </ButtonBase>
+      <Link to="/profile">
+        <ButtonBase
+          sx={{
+            p: 0.25,
+            bgcolor: 'transparent',
+            borderRadius: 1
+          }}
+          ref={anchorRef}
+        >
+          <Stack direction="row" spacing={1.25} alignItems="center" sx={{ p: 0.5 }}>
+            <Avatar alt="profile user" src={avatar1} size="sm" />
+            <Typography variant="subtitle1" sx={{ color: '#262626' }}>
+              {user?._id && `${user?.name}`}
+            </Typography>
+          </Stack>
+        </ButtonBase>
+      </Link>
       <IconButton size="large" sx={{ color: 'text.primary' }} onClick={handleLogout}>
         <LogoutOutlined />
       </IconButton>
